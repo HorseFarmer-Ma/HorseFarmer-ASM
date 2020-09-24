@@ -1,0 +1,3 @@
+rootProject.name='HorseFarmer-ASM'
+include ':app'
+include ':buildSrc'
