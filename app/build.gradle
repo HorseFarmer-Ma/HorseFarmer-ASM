@@ -32,7 +32,6 @@ android {
 
 AsmExtension {
     incremental false
-    excludeClassArray '.class', '.txt'
 }
 
 dependencies {

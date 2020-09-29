@@ -35,10 +35,10 @@ internal abstract class BaseAsmTransform(protected val project: Project) : Trans
     override fun transform(transformInvocation: TransformInvocation) {
         val outputProvider = transformInvocation.outputProvider
         val incremental = transformInvocation.isIncremental
+        log("isIncremental=$isIncremental")
         if (!incremental) {
             transformInvocation.outputProvider.deleteAll()
         }
-        log("incremental = $incremental")
         transformInvocation.inputs.forEach { input ->
             input.directoryInputs.forEach { directoryInput ->
                 transformDirectory(directoryInput, outputProvider, incremental)

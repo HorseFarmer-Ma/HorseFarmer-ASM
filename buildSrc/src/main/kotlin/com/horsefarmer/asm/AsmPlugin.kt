@@ -16,6 +16,7 @@ class AsmPlugin : Plugin<Project> {
 
         // Android主工程，添加字节码处理器
         project.extensions.findByType(AppExtension::class.java)?.run {
+            log("AsmPlugin registerTransform AsmTransformImpl")
             registerTransform(AsmTransformImpl(project))
         }
 

@@ -3,7 +3,7 @@ package com.horsefarmer.asm.internal.transform
 import com.horsefarmer.asm.internal.extension.AsmExtension
 import com.horsefarmer.asm.internal.util.log
 import com.horsefarmer.asm.internal.visitor.ClassVisitorChain
-import com.horsefarmer.asm.internal.visitor.OnClickClassVisitor
+import com.horsefarmer.asm.internal.visitor.OnTestClassVisitor
 import org.gradle.api.Project
 
 internal class AsmTransformImpl(project: Project) : BaseAsmTransform(project) {
@@ -13,8 +13,6 @@ internal class AsmTransformImpl(project: Project) : BaseAsmTransform(project) {
     }
 
     override fun filterVisitClass(fileName: String): Boolean {
-        log("filterVisitClass=$fileName")
-
         // 非class文件，不处理，直接过滤
         if (!fileName.contains(".class")) {
             return true
@@ -31,7 +29,7 @@ internal class AsmTransformImpl(project: Project) : BaseAsmTransform(project) {
 
     override fun dealClassChain(chain: ClassVisitorChain) {
         chain.addVisitor {
-            OnClickClassVisitor(it)
+            OnTestClassVisitor(it)
         }
     }
 
