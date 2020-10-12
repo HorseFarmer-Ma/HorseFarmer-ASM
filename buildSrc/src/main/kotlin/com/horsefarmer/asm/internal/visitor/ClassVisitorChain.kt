@@ -1,5 +1,6 @@
 package com.horsefarmer.asm.internal.visitor
 
+import org.objectweb.asm.ClassReader
 import org.objectweb.asm.ClassVisitor
 import org.objectweb.asm.ClassWriter
 
@@ -23,5 +24,8 @@ internal class ClassVisitorChain(private var cw: ClassWriter) {
         return this
     }
 
-    fun obtain(): ClassVisitor = checkNotNull(this.cv) { "Please call addVisitor first!" }
+    fun intercept(cr: ClassReader) {
+        checkNotNull(this.cv) { "Please call addVisitor first!" }
+        cr.accept(cv, ClassReader.EXPAND_FRAMES)
+    }
 }

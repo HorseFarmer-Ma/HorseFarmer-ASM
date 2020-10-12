@@ -151,8 +151,11 @@ internal abstract class BaseAsmTransform(protected val project: Project) : Trans
     private fun InputStream.visitClass(): ByteArray {
         val cr = ClassReader(this)
         val cw = ClassWriter(ClassWriter.COMPUTE_MAXS)
-        val cv = ClassVisitorChain(cw).also { dealClassChain(it) }.obtain()
-        cr.accept(cv, ClassReader.EXPAND_FRAMES)
+        ClassVisitorChain(cw)
+            .also {
+                dealClassChain(it)
+            }
+            .intercept(cr)
         return cw.toByteArray()
     }
 
