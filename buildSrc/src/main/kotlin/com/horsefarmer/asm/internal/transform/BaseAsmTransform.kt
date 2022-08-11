@@ -8,7 +8,6 @@ import com.horsefarmer.asm.internal.util.log
 import com.horsefarmer.asm.internal.visitor.ClassVisitorChain
 import org.gradle.api.Project
 import org.objectweb.asm.ClassReader
-import org.objectweb.asm.ClassVisitor
 import org.objectweb.asm.ClassWriter
 import java.io.File
 import java.io.FileOutputStream

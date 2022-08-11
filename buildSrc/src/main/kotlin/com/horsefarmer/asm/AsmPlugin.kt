@@ -1,7 +1,6 @@
 package com.horsefarmer.asm
 
 import com.android.build.gradle.AppExtension
-import com.horsefarmer.asm.internal.AsmEnv
 import com.horsefarmer.asm.internal.extension.AsmExtension
 import com.horsefarmer.asm.internal.transform.AsmTransformImpl
 import com.horsefarmer.asm.internal.util.log

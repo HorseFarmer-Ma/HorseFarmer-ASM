@@ -1,9 +1,9 @@
 package com.horsefarmer.asm.internal.transform
 
 import com.horsefarmer.asm.internal.extension.AsmExtension
-import com.horsefarmer.asm.internal.util.log
 import com.horsefarmer.asm.internal.visitor.ClassVisitorChain
 import com.horsefarmer.asm.internal.visitor.OnTestClassVisitor
+import com.horsefarmer.asm.internal.visitor.SuperClassReplaceVisitor
 import org.gradle.api.Project
 
 internal class AsmTransformImpl(project: Project) : BaseAsmTransform(project) {
@@ -30,6 +30,7 @@ internal class AsmTransformImpl(project: Project) : BaseAsmTransform(project) {
     override fun dealClassChain(chain: ClassVisitorChain) {
         chain.addVisitor {
             OnTestClassVisitor(it)
+            SuperClassReplaceVisitor(it)
         }
     }
 
