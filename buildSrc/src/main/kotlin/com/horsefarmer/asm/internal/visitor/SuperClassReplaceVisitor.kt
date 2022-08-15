@@ -1,9 +1,11 @@
 package com.horsefarmer.asm.internal.visitor
 
+import com.horsefarmer.asm.internal.util.log
 import org.objectweb.asm.ClassVisitor
 import org.objectweb.asm.Opcodes
 
-internal class SuperClassReplaceVisitor(cv: ClassVisitor) : ClassVisitor(Opcodes.ASM5, cv) {
+internal class SuperClassReplaceVisitor(cv: ClassVisitor, private val replaceSuperProps: Map<String, String>) :
+    ClassVisitor(Opcodes.ASM5, cv) {
 
     override fun visit(
         version: Int,
@@ -13,8 +15,17 @@ internal class SuperClassReplaceVisitor(cv: ClassVisitor) : ClassVisitor(Opcodes
         superName: String?,
         interfaces: Array<out String>?
     ) {
-        if ("com/horsefarmer/asm/MainActivity" == name) {
-            super.visit(version, access, name, signature, "com/horsefarmer/asm/BaseActivity", interfaces)
+
+        if (replaceSuperProps.containsKey(name)) {
+            log(" ================= SuperClassReplaceVisitor: find ================\nname=$name\noriginSuperClass=$superName\ndestSuperClass=${replaceSuperProps[name]}")
+            super.visit(
+                version,
+                access,
+                name,
+                signature,
+                replaceSuperProps[name],
+                interfaces
+            )
         } else {
             super.visit(version, access, name, signature, superName, interfaces)
         }

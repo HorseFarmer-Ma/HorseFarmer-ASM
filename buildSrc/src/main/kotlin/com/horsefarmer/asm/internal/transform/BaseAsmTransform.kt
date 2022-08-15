@@ -34,9 +34,9 @@ internal abstract class BaseAsmTransform(protected val project: Project) : Trans
     override fun transform(transformInvocation: TransformInvocation) {
         val outputProvider = transformInvocation.outputProvider
         val incremental = transformInvocation.isIncremental
-        log("isIncremental=$isIncremental")
+        log("isIncremental=$incremental")
         if (!incremental) {
-            transformInvocation.outputProvider.deleteAll()
+            outputProvider.deleteAll()
         }
         transformInvocation.inputs.forEach { input ->
             input.directoryInputs.forEach { directoryInput ->
@@ -66,8 +66,9 @@ internal abstract class BaseAsmTransform(protected val project: Project) : Trans
                 val inputFile = entry.key
                 val outputFile = inputFile.obtainNewOutputFile(outputDir, inputDir)
                 when (entry.value) {
-                    // No changed, transfer
-                    Status.NOTCHANGED -> FileUtils.copyFile(inputFile, outputFile)
+                    Status.NOTCHANGED -> {
+                        // No changed, doNothing
+                    }
                     Status.ADDED, Status.CHANGED -> modifiedDirectorFile(inputFile, outputFile)
                     else -> FileUtils.deletePath(outputFile)
                 }
@@ -94,8 +95,9 @@ internal abstract class BaseAsmTransform(protected val project: Project) : Trans
         )
         if (isIncremental) {
             when (jarInput.status) {
-                // No changed, transfer
-                Status.NOTCHANGED -> FileUtils.copyFile(inputJar, outputJar)
+                Status.NOTCHANGED -> {
+                    // No changed, doNothing
+                }
                 Status.ADDED, Status.CHANGED -> modifyJarFile(inputJar, outputJar)
                 else -> FileUtils.deletePath(outputJar)
             }
@@ -105,6 +107,11 @@ internal abstract class BaseAsmTransform(protected val project: Project) : Trans
     }
 
     private fun modifiedDirectorFile(inputFile: File, outputFile: File) {
+        if (inputFile.isDirectory) {
+            // 文件夹不用处理
+            return
+        }
+        outputFile.parentFile.mkdirs()
         FileOutputStream(outputFile).use { outputStream ->
             val byteArray = inputFile.inputStream().use { inputStream ->
                 if (filterVisitClass(inputFile.name))
@@ -144,7 +151,7 @@ internal abstract class BaseAsmTransform(protected val project: Project) : Trans
         return File(
             outputDir,
             FileUtils.relativePossiblyNonExistingPath(this, inputDir)
-        ).also { it.parentFile?.mkdirs() }
+        )
     }
 
     private fun InputStream.visitClass(): ByteArray {

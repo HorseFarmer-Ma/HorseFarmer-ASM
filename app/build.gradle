@@ -32,6 +32,7 @@ android {
 
 AsmExtension {
     incremental false
+    replaceSuperProps "com.horsefarmer.asm.MainActivity/com.horsefarmer.asm.BaseActivity"
 }
 
 dependencies {
